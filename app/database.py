@@ -1,39 +1,30 @@
-from langchain_community.vectorstores.pgvector import PGVector
-from langchain_huggingface import HuggingFaceEmbeddings
-import logging
-import os
+from langchain_postgres import PGVector
+from langchain_postgres.vectorstores import PGVector
+from langchain_ollama import OllamaEmbeddings
 from app.pdf_processing import load_and_split_pdfs
-from app.settings import DB_SETTINGS, EMBEDDING_MODEL, PDF_FOLDER
+from app.settings import EMBEDDINGS_MODEL, DB_CONNECTION, COLLECTION_NAME, OLLAMA_URL
+import logging
 
-def initialize_database_with_pgvector():
-    """
-    Initializes the PGVector database and optionally loads PDF embeddings.
-    """
-    # Retrieve database settings from settings.py
-    connection_string = (
-        f"postgresql://{DB_SETTINGS['user']}:{DB_SETTINGS['password']}@"
-        f"{DB_SETTINGS['host']}:{DB_SETTINGS['port']}/{DB_SETTINGS['dbname']}"
+logging.basicConfig(level=logging.INFO)
+
+def populate_database():
+
+    vector_store = PGVector(
+    embeddings=OllamaEmbeddings(model=EMBEDDINGS_MODEL, base_url=OLLAMA_URL),
+    collection_name=COLLECTION_NAME,
+    connection=DB_CONNECTION,
+    use_jsonb=True,
     )
 
-    # Initialize embedder and vector store
-    embedder = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
-    vector_store = PGVector(connection_string=connection_string, embedding_function=embedder)
-    logging.info("PGVector initialized successfully.")
+    pdf_docs = load_and_split_pdfs()
 
-    if not os.path.exists(PDF_FOLDER):
-        logging.error(f"PDF folder '{PDF_FOLDER}' does not exist.")
-        return
+    # Add the PDF-based documents to the vector store
+    try:
+        vector_store.add_documents(pdf_docs, ids=[doc.metadata["id"] for doc in pdf_docs])
+        logging.info("Documents added successfully")
+    except Exception as e:
+        logging.info("Error adding documents:", e)
 
-    pdf_files = [os.path.join(PDF_FOLDER, f) for f in os.listdir(PDF_FOLDER) if f.endswith('.pdf')]
-    if not pdf_files:
-        logging.warning("No PDF files found in the specified folder.")
-        return
+    logging.info(f"Added {len(pdf_docs)} documents to the vector store.")
 
-    documents = load_and_split_pdfs(pdf_files)
-
-    # Insert documents and embeddings into the vector store
-    vector_store.add_texts(
-        texts=[doc.page_content for doc in documents],
-        metadatas=[doc.metadata for doc in documents] if hasattr(documents[0], "metadata") else None,
-    )
-    logging.info(f"Inserted {len(documents)} documents into PGVector.")
+    return vector_store
