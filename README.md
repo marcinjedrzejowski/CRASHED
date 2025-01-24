@@ -1,6 +1,6 @@
 # CRASHED
 
-This repository contains a system designed to process PDF documents, store embeddings in a PostgreSQL-based vector database (PGVector), and retrieve and respond to user queries using an LLM-based pipeline. The system is containerized with Docker and accessible via a FastAPI interface.
+This repository contains a RAG system designed to process PDF documents, store embeddings in a PostgreSQL-based vector database (PGVector), and retrieve and respond to user queries using an LLM-based pipeline. The system is containerized with Docker and accessible via a FastAPI interface.
 
 ## Folder Structure
 ```
