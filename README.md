@@ -30,6 +30,15 @@ To test the system via the terminal, use the following curl command:
 curl -X POST "http://localhost:8000/query/" -H "Content-Type: application/json" -d '{"user_query":"<Type_Your_Query_Here>"}'
 ```
 
+## GPU Docker Configuration
+
+To modify the `docker-compose` file for specifying which GPU will be utilized for running the application, you need to adjust the configuration based on your system's GPU. 
+
+Currently, the build is set up to use an AMD graphics card. If you want to switch to using an NVIDIA GPU, follow the instructions provided on the [Ollama Docker Hub page](https://hub.docker.com/r/ollama/ollama). 
+
+Refer to the section on configuring the application for NVIDIA GPUs and update the `docker-compose` file accordingly to ensure proper GPU integration.
+
+
 ## Configuration
 
 Database and embedding settings can be modified in app/settings.py.
