@@ -1,9 +1,8 @@
-langchain
-langchain_community
-langchain-huggingface
-psycopg2-binary
-pgvector
-pypdf
-uvicorn
 fastapi
-
+uvicorn
+langchain
+langchain-ollama
+langchain_postgres
+langchain_community
+pypdf
+psycopg[binary]
