@@ -1,5 +1,5 @@
 DATA_PATH = "./data"
 EMBEDDINGS_MODEL = "llama3"
-DB_CONNECTION = "postgresql+psycopg://langchain:langchain@db:5432/langchain"
-COLLECTION_NAME = "my_docs"
+DB_CONNECTION = "postgresql://langchain:langchain@db:5432/langchain"
+COLLECTION_NAME = "langchain_pg_embedding"
 OLLAMA_URL: str = "http://ollama:11434"
