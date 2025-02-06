@@ -4,7 +4,7 @@ This repository contains a RAG system designed to process PDF documents, store e
 
 ## Starting the System
 
-To start the system, you need to run the command located below from the `docker` folder.
+To start the system, you need to run the command located below from the `docker` folder. For this command to work, Docker has to be installed on the machine.
 
 ```
 docker compose up --build
