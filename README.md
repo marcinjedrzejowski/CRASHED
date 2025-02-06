@@ -2,6 +2,14 @@
 
 This repository contains a RAG system designed to process PDF documents, store embeddings in a PostgreSQL-based vector database (PGVector), and retrieve and respond to user queries using an LLM-based pipeline. The system is containerized with Docker and accessible via a FastAPI interface.
 
+## Starting the System
+
+To start the system, you need to run the command located below from the `docker` folder.
+
+```
+docker compose up --build
+```
+
 ## Folder Structure
 ```
 app/
